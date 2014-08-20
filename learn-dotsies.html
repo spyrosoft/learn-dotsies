@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Learn Dotsies</title>
+	<script src="js/jquery.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/learn-dotsies.js"></script>
+	<script src="js/2000-words.js"></script>
+	<link href="css/learn-dotsies.css" rel="stylesheet" type="text/css" />
+	<link href="http://dotsies.org/dotsies.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="container">
+		<div class="quiz text-center">
+			<p id="generated-output" class="dotsies text-center"></p>
+			<div><input type="text" class="dotsies form-control input-lg text-center" id="user-input" /></div>
+			<h3 class="text-center">Score: <span id="score">0</span></h3>
+			<h3 id="answer"></h3>
+			<p id="show-instructions">
+				<button class="btn btn-primary btn-sm" id="show-instructions-button">Show Instructions</button>
+			</p>
+			<p id="show-options">
+				<button class="btn btn-primary btn-sm" id="show-options-button">Show Options</button>
+			</p>
+			<div id="options">
+				<h3>Font Size</h3>
+				<div id="font-size">
+					<div>
+						<label><input type="radio" name="font_size" value="100" /> Smallest</label>
+					</div>
+						<div>
+						<label><input type="radio" name="font_size" value="150" /> Small</label>
+					</div>
+						<div>
+						<label><input type="radio" name="font_size" value="200" checked="checked" /> Medium</label>
+					</div>
+						<div>
+						<label><input type="radio" name="font_size" value="300" /> Large</label>
+					</div>
+						<div>
+						<label><input type="radio" name="font_size" value="400" /> Largest</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ul id="instructions" class="text-left">
+			<li>These are the 2000 most common English words as adapted from here: <a href="https://github.com/first20hours/google-10000-english">https://github.com/first20hours/google-10000-english</a>.</li>
+			<li>Type what you see.</li>
+			<li>Press "Enter" to reveal the answer.</li>
+			<li>If you type a character incorrectly, your score goes down by one point.</li>
+			<li>If you type a character correctly, your score goes up by one point.</li>
+			<li>If you reveal the answer, your score goes down by one point.</li>
+		</ul>
+	</div>
+</body>
+</html>
