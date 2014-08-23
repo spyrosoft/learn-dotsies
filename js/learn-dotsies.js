@@ -12,6 +12,7 @@ $(document).ready(
 		show_instructions();
 		show_options();
 		update_font_size();
+		shuffle_array( most_common_words );
 		generate_word();
 	}
 );
@@ -132,4 +133,24 @@ function update_font_size()
 {
 	var new_font_size = $('input[name=font_size]:checked').val() + '%';
 	$('#generated-output').css( 'font-size', new_font_size );
+}
+
+function shuffle_array( array )
+{
+	var current_index = array.length;
+	var temporary_value;
+	var random_index;
+
+	while ( 0 !== current_index ) {
+
+		random_index = Math.floor( Math.random() * current_index );
+		current_index -= 1;
+
+		temporary_value = array[ current_index ];
+		array[ current_index ] = array[ random_index ];
+		array[ random_index ] = temporary_value;
+
+	}
+
+	return array;
 }
