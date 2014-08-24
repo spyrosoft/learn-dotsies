@@ -1331,7 +1331,6 @@ var most_common_words = [
 	"extra",
 	"especially",
 	"interface",
-	"pussy",
 	"partners",
 	"budget",
 	"rated",
