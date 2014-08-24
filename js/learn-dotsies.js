@@ -4,8 +4,9 @@ var previous_user_input;
 var score = 0;
 
 var review_characters = [];
-var review_round = false;
 var number_of_retries = 5;
+
+var letter_to_most_common_word_map = [];
 
 $(document).ready(
 	function() {
@@ -18,6 +19,7 @@ $(document).ready(
 		show_options();
 		update_font_size();
 		shuffle_array( most_common_words );
+		generate_letter_to_most_common_word_map();
 		generate_word();
 	}
 );
@@ -25,12 +27,7 @@ $(document).ready(
 function generate_word()
 {
 	if ( review_characters.length > 0 ) {
-		if ( review_round ) {
-			generate_next_review_word();
-		} else {
-			generate_next_most_common_word();
-		}
-		review_round = !review_round;
+		generate_next_review_word();
 	} else {
 		generate_next_most_common_word();
 	}
@@ -48,7 +45,7 @@ function generate_next_most_common_word()
 
 function generate_next_review_word()
 {
-	var current_review_character_code = review_characters.pop();
+	var current_review_character_code = review_characters.shift();
 	var random_index_from_letter_to_most_common_word_map =
 		Math.floor(
 			Math.random()
@@ -178,6 +175,20 @@ function update_font_size()
 {
 	var new_font_size = $('input[name=font_size]:checked').val() + '%';
 	$('#generated-output').css( 'font-size', new_font_size );
+}
+
+function generate_letter_to_most_common_word_map()
+{
+	for ( var word_index = 0; word_index < most_common_words.length; word_index++ ) {
+		for ( var char_index = 0; char_index < most_common_words[ word_index ].length; char_index++ ) {
+			var current_letter = most_common_words[ word_index ][ char_index ];
+			var current_character_code = most_common_words[ word_index ].charCodeAt( char_index );
+			if ( ! letter_to_most_common_word_map[ current_character_code ] ) {
+				letter_to_most_common_word_map[ current_character_code ] = [];
+			}
+			letter_to_most_common_word_map[ current_character_code ].push( word_index );
+		}
+	}
 }
 
 function shuffle_array( array )
