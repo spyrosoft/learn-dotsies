@@ -1,6 +1,11 @@
 var current_word = '';
+var current_word_index = 0;
 var previous_user_input;
 var score = 0;
+
+var review_characters = [];
+var review_round = false;
+var number_of_retries = 5;
 
 $(document).ready(
 	function() {
@@ -19,13 +24,39 @@ $(document).ready(
 
 function generate_word()
 {
-	if ( most_common_words.length == 0 ) {
-		alert( 'You have traversed 2000 words. That is all for this tutorial. Well done!' );
-		$('#user-input').attr( 'disabled', 'true' );
-		return;
+	if ( review_characters.length > 0 ) {
+		if ( review_round ) {
+			generate_next_review_word();
+		} else {
+			generate_next_most_common_word();
+		}
+		review_round = !review_round;
+	} else {
+		generate_next_most_common_word();
 	}
-	current_word = most_common_words.shift();
 	$('#generated-output').html( current_word );
+}
+
+function generate_next_most_common_word()
+{
+	current_word_index++;
+	if ( current_word_index >= most_common_words.length ) {
+		current_word_index = 0;
+	}
+	current_word = most_common_words[ current_word_index ];
+}
+
+function generate_next_review_word()
+{
+	var current_review_character_code = review_characters.pop();
+	var random_index_from_letter_to_most_common_word_map =
+		Math.floor(
+			Math.random()
+				* letter_to_most_common_word_map[ current_review_character_code ].length
+		);
+	var random_most_common_word_index
+		= letter_to_most_common_word_map[ current_review_character_code ][ random_index_from_letter_to_most_common_word_map ];
+	current_word = most_common_words[ random_most_common_word_index ];
 }
 
 function user_input_keyup( keyup_event )
@@ -34,6 +65,9 @@ function user_input_keyup( keyup_event )
 	hide_options();
 	if ( keyup_event.keyCode == 13 ) {
 		reveal_answer();
+		add_review_character();
+		score--;
+		update_score();
 	} else {
 		hide_answer();
 		check_user_input();
@@ -44,13 +78,23 @@ function reveal_answer()
 {
 	var user_input_length = $('#user-input').val().length;
 	$('#answer').html( 'Answer: ' + current_word[ user_input_length ] );
-	score--;
-	update_score();
 }
 
 function hide_answer()
 {
 	$('#answer').html( '' );
+}
+
+function add_review_character()
+{
+	var user_input_length = $('#user-input').val().length;
+	if ( user_input_length >= current_word.length ) {
+		return;
+	}
+	var review_character_code = current_word.charCodeAt( user_input_length );
+	for ( var i = 0; i < number_of_retries; i++ ) {
+		review_characters.push( review_character_code );
+	}
 }
 
 function check_user_input()
@@ -68,6 +112,7 @@ function check_user_input()
 
 			$('#user-input').val( correct_user_input );
 			flash_screen();
+			add_review_character();
 			score--;
 
 		} else if ( user_input.length == current_word.length ) {
