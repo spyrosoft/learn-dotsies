@@ -104,7 +104,7 @@ function check_user_input()
 	}
 	var correct_user_input = '';
 	for ( i = 0; i < user_input.length; i++ ) {
-
+		
 		if ( user_input[ i ] != current_word[ i ] ) {
 
 			$('#user-input').val( correct_user_input );
@@ -112,7 +112,8 @@ function check_user_input()
 			add_review_character();
 			score--;
 
-		} else if ( user_input.length == current_word.length ) {
+		} else if ( i == current_word.length-1
+		&& user_input.length == current_word.length ) {
 		
 			generate_word();
 			$('#user-input').val('');
