@@ -1,6 +1,6 @@
 var current_word = '';
 var current_word_index = 0;
-var previous_user_input;
+var previous_user_input = '';
 var score = 0;
 
 var review_characters = [];
@@ -11,6 +11,7 @@ var letter_to_most_common_word_map = [];
 $(document).ready(
 	function() {
 		$('#user-input').focus();
+		$('#user-input').val( '' );
 		$('#user-input').keyup(user_input_keyup);
 		$('#show-instructions-button').click(show_instructions);
 		$('#show-options-button').click(show_options);
@@ -99,43 +100,61 @@ function check_user_input()
 	var user_input = $('#user-input').val();
 	if ( user_input == previous_user_input ) {
 		return;
-	} else {
+	} else if ( user_input.length < previous_user_input.length ) {
+		score -= previous_user_input.length - user_input.length;
+		update_score();
 		previous_user_input = user_input;
+		return;
 	}
+	
 	var correct_user_input = '';
 	for ( i = 0; i < user_input.length; i++ ) {
 		
 		if ( user_input[ i ] != current_word[ i ] ) {
-
+			
 			$('#user-input').val( correct_user_input );
+			previous_user_input = correct_user_input;
 			flash_screen();
 			add_review_character();
 			score--;
-
+			
 		} else if ( i == current_word.length-1
 		&& user_input.length == current_word.length ) {
-		
+			
 			generate_word();
 			$('#user-input').val('');
+			previous_user_input = '';
 			score++;
 			break;
-
+			
 		} else {
-
+			
 			correct_user_input += user_input[ i ];
+			previous_user_input = correct_user_input;
 			if ( i == user_input.length - 1 ) {
 				score++;
 			}
-
+			
 		}
-
+		
 	}
 	update_score();
 }
 
 function flash_screen()
 {
-	$('body').css('background-color', '#AAAAAA');
+	var danger_color_rgb = review_characters.length + 128;
+	if ( danger_color_rgb > 255 ) {
+		danger_color_rgb = 255;
+	}
+	var padding_color_rgb = 255 - danger_color_rgb;
+	console.log(danger_color_rgb);
+	console.log(padding_color_rgb);
+	padding_color_rgb = padding_color_rgb.toString(16);
+	if ( padding_color_rgb.length < 2 ) {
+		padding_color_rgb = padding_color_rgb + '0';
+	}
+	$('body').css('background-color', '#' + danger_color_rgb.toString(16) + padding_color_rgb + padding_color_rgb);
 	setTimeout("$('body').css('background-color', '#FFFFFF');", 100);
 }
 
